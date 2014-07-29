@@ -1,0 +1,206 @@
+
+<html>
+
+<body onload="go();">
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.1/jquery.min.js"></script>
+<canvas id="myCanvas" width="700" height="600" style="background-color:grey;border:1px solid #c3c3c3;">
+Your browser does not support the HTML5 canvas tag.
+</canvas>
+<div id="scor" style="background-color:red;height:100px;width:150px;position:absolute;left:800px;top:250px;text-align:center">
+<h>SCORE</h>
+<h1 id="s">0</h1>
+</div>
+<script>
+var canvas=document.getElementById("myCanvas");
+var ctx=canvas.getContext('2d');
+var a=[[200,600,900],[400,240,900],[600,420,900],[800,300,900]];
+var tol=0;
+var x=50;
+var y=175;
+var status=1;
+var g=0;
+var flag=0;
+var count=0;
+var k=0;
+var op=1;
+var m;
+var status1=2;
+var status2=1;
+var status0=1;
+var score=0;
+
+
+function go()
+{
+ctx.clearRect(0,0,700,600);
+for(i=0;i<4;i++)
+{
+ctx.beginPath();
+ctx.moveTo(0,a[i][0]);
+ctx.lineTo(a[i][2]-40,a[i][0]);
+ctx.moveTo(a[i][2]+40,a[i][0]);
+ctx.lineTo(700,a[i][0]);
+ctx.lineWidth=15;
+
+ctx.stroke();
+ctx.fill();
+}
+for(i=0;i<4;i++)
+{
+ctx.beginPath()
+ctx.fillRect(a[i][1],a[i][0]-20,20,20);
+}
+ctx.beginPath();
+ctx.fillRect(x,y,20,20);
+ctx.stroke();
+if(status==1)
+{
+x+=1;
+if(x>=675)
+status=2;
+}
+if(status==2)
+{
+x-=1;
+if(x<=0)
+status=1;
+}
+if(a[0][0]<=0)
+{
+score++;
+for(i=0;i<3;i++)
+{
+a[i][0]=a[i+1][0];
+a[i][1]=a[i+1][1];
+a[i][2]=a[i+1][2];
+}
+a[3][0]=800;
+a[3][1]=Math.floor(Math.random()*700);
+a[3][2]=900;
+status0=status1;
+status1=status2;
+status2=Math.floor(Math.random()*2);
+if(status2!=2)
+status2+=1;
+}
+if(status0==1)
+{
+a[0][1]+=2;
+if(a[0][1]>=675)
+status0=2;
+}
+else if(status0==2)
+{
+a[0][1]-=2;
+if(a[0][1]<=0)
+status0=1;
+}
+if(status1==1)
+{
+a[1][1]+=2;
+if(a[1][1]>=675)
+status1=2;
+}
+else if(status1==2)
+{
+a[1][1]-=2;
+if(a[1][1]<=0)
+status1=1;
+}
+if(status2==1)
+{
+a[2][1]+=2;
+if(a[2][1]>=675)
+status2=2;
+}
+else if(status2==2)
+{
+a[2][1]-=2;
+if(a[2][1]<=0)
+status2=1;
+}
+if(status0==1)
+{
+a[0][1]+=2;
+if(a[0][1]>=675)
+status0=2;
+}
+else if(status0==2)
+{
+a[0][1]-=2;
+if(a[0][1]<=0)
+status0=1;
+}
+
+
+if(flag==1)
+{
+if(g<=30)
+y-=3;
+else y+=3;
+for(i=0;i<4;i++)
+{
+a[i][0]-=1;
+}
+if(Math.abs(y-a[0][0])<10)
+{
+console.log("hai");
+a[0][2]=x;
+}
+if(Math.abs(y-a[1][0])<10)
+{
+flag=0;
+op=2;
+y=a[1][0]-25;
+for(i=0;i<4;i++)
+{
+if(k!=2)
+a[i][0]-=99;
+else
+a[i][0]-=101;
+}
+if(k!=2)
+y-=99;
+else
+y-=101;
+k=2;
+g=0;
+}
+g++;
+}
+for(i=0;i<4;i++)
+{
+if(y<a[i][0] && a[i][1]+15>x && a[i][1]<x+15 && y>=a[i][0]-35)
+{
+ ctx.beginPath();
+ ctx.font="20px Georgia";
+ ctx.fillText("GAME OVER.......",400,300);
+ tol=1;
+ break;
+ }
+}
+document.getElementById('s').innerHTML=score;
+if(tol==0)
+l=setTimeout(go,10);
+}
+
+document.onkeydown = function(evt) 
+{
+if(tol!=1)
+{
+        evt = evt || window.event;
+        switch (evt.keyCode) 
+	{
+        case 38:
+		clearTimeout(l);
+		count=0;
+		flag=1;
+		go();
+		break;
+	}
+ }       
+};
+</script>
+
+</body>
+</html>
